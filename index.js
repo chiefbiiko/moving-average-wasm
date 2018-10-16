@@ -46,11 +46,23 @@ module.exports = function ma (series, order) {
   const loop_end = series_len - side_len
 
   // let cur_sum = sum(series, i - side_len, i + side_len)
-  var cur_sum = sum(series, 0, window_len)
-  for (let i = side_len, sub = 0 add = window_len; i < loop_end; i++, sub++, add++) {
-    ma[i] = cur_sum / window_len
-    cur_sum -= series[sub]
-    cur_sum += series[add]
+  if (odd) {
+    let cur_sum = sum(series, 0, window_len)
+    for (let i = side_len, window_head = 0, window_tail = window_len - 1; i < loop_end; i++, window_head++, window_tail++) {
+      ma[i] = cur_sum / window_len
+      cur_sum -= series[window_head]
+      cur_sum += series[window_tail + 1]
+    }
+  } else {
+    let cur_sum = sum(series, 0, window_len) - (series[0] / 2) - (series[window_len] / 2)
+    for (let i = side_len, window_head = 0, window_tail = window_len - 1; i < loop_end; i++, window_head++, window_tail++) {
+      ma[i] = cur_sum / window_len
+      cur_sum -= (series[window_head] / 2)
+      cur_sum += (series[window_tail] / 2)
+      cur_sum -= (series[window_head + 1] / 2)
+      cur_sum += (series[window_tail] / 2)
+    }
   }
+
   return ma
 }
