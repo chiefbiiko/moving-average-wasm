@@ -1,5 +1,5 @@
 const tape = require('tape')
-const ma = require('/index.js')
+const ma = require('./index.js')
 
 tape('odd-ordered moving averages', t => {
   t.same(
