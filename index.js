@@ -41,7 +41,7 @@ module.exports = function ma (series, order) {
   const series_len = series.length
 
   // BELOW: assumes odd ordered ma!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  const ma = Array(series_len)
+  const ma = Array(series_len).fill(null)
   const side_len = (window_len - 1) / 2
   const loop_end = series_len - side_len
 
