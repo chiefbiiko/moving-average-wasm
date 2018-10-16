@@ -1,0 +1,23 @@
+{
+  "name": "moving-average-wasm",
+  "version": "0.0.0",
+  "description": "calculate moving averages in WebAssembly",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chiefbiiko/moving-average-wasm.git"
+  },
+  "keywords": [
+    "moving-average",
+    "wasm"
+  ],
+  "author": "Noah Anabiik Schwarz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chiefbiiko/moving-average-wasm/issues"
+  },
+  "homepage": "https://github.com/chiefbiiko/moving-average-wasm#readme"
+}
