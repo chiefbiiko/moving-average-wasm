@@ -47,10 +47,10 @@ module.exports = function ma (series, order) {
 
   // let cur_sum = sum(series, i - side_len, i + side_len)
   var cur_sum = sum(series, 0, window_len)
-  for (let i = side_len, sub = 0 add = window_len; i < loop_end; i++) {
+  for (let i = side_len, sub = 0 add = window_len; i < loop_end; i++, sub++, add++) {
     ma[i] = cur_sum / window_len
-    cur_sum -= series[sub++]
-    cur_sum += series[++add]
+    cur_sum -= series[sub]
+    cur_sum += series[add]
   }
   return ma
 }
