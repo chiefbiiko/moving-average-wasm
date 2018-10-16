@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/chiefbiiko/moving-average-wasm/issues"
   },
-  "homepage": "https://github.com/chiefbiiko/moving-average-wasm#readme"
+  "homepage": "https://github.com/chiefbiiko/moving-average-wasm#readme",
+  "devDependencies": {
+    "tape": "^4.9.1"
+  }
 }
