@@ -19,7 +19,7 @@ tape('even-ordered moving average (automatically ceiled and centered)', t => {
   t.end()
 })
 
-tape.only('even-ordered moving average (neither ceiled nor centered)', t => {
+tape('even-ordered moving average (neither ceiled nor centered)', t => {
   t.same(
     ma([ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ], 4, false),
     [ null, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, null, null ],
