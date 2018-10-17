@@ -10,7 +10,7 @@ tape('odd-ordered moving average', t => {
   t.end()
 })
 
-tape('even-ordered moving average (automatically ceiled and centered)', t => {
+tape('even-ordered moving average (ceiled and centered)', t => {
   t.same(
     ma([ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ], 4),
     [ null, null, 3, 4, 5, 6, 7, 8, null, null ],
