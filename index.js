@@ -24,7 +24,7 @@ const sum = (arr, start, end) => {
 }
 
 // if order is even, the observations averaged will include one more
-// observation from the future than the past, and will be centered
+// observation from the future than the past
 const ma = (ts, order, center = true) => {
   if (!isNumArr(ts)) throw TypeError('ts (time series) is not a number array')
   if (order % 1) throw TypeError('order is not an integer')
@@ -43,13 +43,12 @@ const ma = (ts, order, center = true) => {
         i = side_len,
         loop_end = ts_len - side_len;
       i < loop_end;
-      i++, win_head++, win_tail++
+      i++, win_sum += (
+        (ts[win_tail++] / 2) + (ts[win_tail] / 2)
+        - (ts[win_head++] / 2) - (ts[win_head] / 2)
+      )
     ) {
       mov_avg[i] = win_sum / order
-      win_sum += (
-        (ts[win_tail] / 2) + (ts[win_tail + 1] / 2)
-        - (ts[win_head] / 2) - (ts[win_head + 1] / 2)
-      )
     }
   } else if (!odd) { // even
     for (
@@ -60,12 +59,11 @@ const ma = (ts, order, center = true) => {
         i = side_len - 1,
         loop_end = ts_len - side_len;
       i < loop_end;
-      i++, win_head++, win_tail++
+      i++, win_sum += (ts[++win_tail] - ts[win_head++])
     ) {
       mov_avg[i] = win_sum / order
-      win_sum += (ts[win_tail + 1] - ts[win_head])
     }
-  } else if (odd) { // odd
+  } else { // odd
     for (
       let win_sum = sum(ts, 0, order),
         win_head = 0,
@@ -74,10 +72,9 @@ const ma = (ts, order, center = true) => {
         i = side_len,
         loop_end = ts_len - side_len;
       i < loop_end;
-      i++, win_head++, win_tail++
+      i++, win_sum += (ts[++win_tail] - ts[win_head++])
     ) {
       mov_avg[i] = win_sum / order
-      win_sum += (ts[win_tail + 1] - ts[win_head])
     }
   }
 
