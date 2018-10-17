@@ -55,7 +55,7 @@ const ma = (ts, order, center = true) => {
       let win_sum = sum(ts, 0, odd ? win_len : order),
         i = odd ? side_len : side_len - 1,
         win_head = 0,
-        win_tail = odd ? win_len - 1 : win_len - 2;
+        win_tail = odd ? win_len - 1 : order - 1;
       i < loop_end;
       i++, win_head++, win_tail++
     ) {
