@@ -37,27 +37,27 @@ const ma = (ts, order) => {
 
   if (odd) {
     for (
-      let cur_sum = sum(ts, 0, win_len),
+      let win_sum = sum(ts, 0, win_len),
         i = side_len,
         win_head = 0,
         win_tail = 2 * side_len;
       i < loop_end;
       i++, win_head++, win_tail++
     ) {
-      ma[i] = cur_sum / win_len
-      cur_sum += (ts[win_tail + 1] - ts[win_head])
+      ma[i] = win_sum / win_len
+      win_sum += (ts[win_tail + 1] - ts[win_head])
     }
   } else { // even order
     for (
-      let cur_sum = sum(ts, 0, win_len) - (ts[0] / 2) - (ts[order] / 2),
+      let win_sum = sum(ts, 0, win_len) - (ts[0] / 2) - (ts[order] / 2),
         i = side_len,
         win_head = 0,
         win_tail = 2 * side_len;
       i < loop_end;
       i++, win_head++, win_tail++
     ) {
-      ma[i] = cur_sum / order
-      cur_sum += (
+      ma[i] = win_sum / order
+      win_sum += (
         (ts[win_tail] / 2) + (ts[win_tail + 1] / 2)
         - (ts[win_head] / 2) - (ts[win_head + 1] / 2)
       )
