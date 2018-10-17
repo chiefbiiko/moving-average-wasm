@@ -53,14 +53,14 @@ module.exports = function ma (series, order) {
       cur_sum -= series[window_head]
       cur_sum += series[window_tail + 1]
     }
-  } else {
-    let cur_sum = sum(series, 0, window_len) - (series[0] / 2) - (series[window_len] / 2)
-    for (let i = side_len, window_head = 0, window_tail = window_len - 1; i < loop_end; i++, window_head++, window_tail++) {
-      ma[i] = cur_sum / window_len
+  } else { // even order
+    let cur_sum = sum(series, 0, window_len) - (series[0] / 2) - (series[window_len - 1] / 2)
+    for (let i = side_len, window_head = 0, window_tail = 2 * side_len; i < loop_end; i++, window_head++, window_tail++) {
+      ma[i] = cur_sum / order
       cur_sum -= (series[window_head] / 2)
       cur_sum += (series[window_tail] / 2)
       cur_sum -= (series[window_head + 1] / 2)
-      cur_sum += (series[window_tail] / 2)
+      cur_sum += (series[window_tail + 1] / 2)
     }
   }
 
