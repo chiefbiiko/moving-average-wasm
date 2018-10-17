@@ -1,4 +1,4 @@
-/* hyndman's ma function from pkg forecast
+/* hyndman's forecast::ma for reference
 ma <- function(x, order, centre=TRUE) {
   if (abs(order - round(order)) > 1e-8) {
     stop("order must be an integer")
@@ -23,46 +23,48 @@ const sum = (arr, start, end) => {
 
 // if order is even, the observations averaged will include one more
 // observation from the future than the past, and will be centered
-module.exports = function ma (series, order) {
-  if (!isNumArr(series)) throw TypeError('series is not a number array')
+const ma = (ts, order) => {
+  if (!isNumArr(ts)) throw TypeError('ts (time series) is not a number array')
   if (order % 1) throw TypeError('order is not an integer')
   if (order < 2) throw TypeError('order is not greater than 1')
+
   const odd = order % 2
-  const window_len = odd ? order : order + 1
-  // const weight_len = odd ? order : order + 1
-  // const weight = Array(weight_len)
-  // if (odd) {
-  //   for (let v = 1 / order, i = 0; i < weight_len; i++) weight[i] = v
-  // } else {
-  //   const tail = weight_len - 1
-  //   weight[0] = weight[tail] = .5 / order
-  //   for (let v = 1 / order, i = 1; i < tail; i++) weight[i] = v
-  // }
-  const series_len = series.length
+  const win_len = odd ? order : order + 1
+  const ts_len = ts.length
+  const ma = Array(ts_len).fill(null)
+  const side_len = (win_len - 1) / 2
+  const loop_end = ts_len - side_len
 
-  // BELOW: assumes odd ordered ma!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  const ma = Array(series_len).fill(null)
-  const side_len = (window_len - 1) / 2
-  const loop_end = series_len - side_len
-
-  // let cur_sum = sum(series, i - side_len, i + side_len)
   if (odd) {
-    let cur_sum = sum(series, 0, window_len)
-    for (let i = side_len, window_head = 0, window_tail = window_len - 1; i < loop_end; i++, window_head++, window_tail++) {
-      ma[i] = cur_sum / window_len
-      cur_sum -= series[window_head]
-      cur_sum += series[window_tail + 1]
+    for (
+      let cur_sum = sum(ts, 0, win_len),
+        i = side_len,
+        win_head = 0,
+        win_tail = 2 * side_len;
+      i < loop_end;
+      i++, win_head++, win_tail++
+    ) {
+      ma[i] = cur_sum / win_len
+      cur_sum += (ts[win_tail + 1] - ts[win_head])
     }
   } else { // even order
-    let cur_sum = sum(series, 0, window_len) - (series[0] / 2) - (series[window_len - 1] / 2)
-    for (let i = side_len, window_head = 0, window_tail = 2 * side_len; i < loop_end; i++, window_head++, window_tail++) {
+    for (
+      let cur_sum = sum(ts, 0, win_len) - (ts[0] / 2) - (ts[order] / 2),
+        i = side_len,
+        win_head = 0,
+        win_tail = 2 * side_len;
+      i < loop_end;
+      i++, win_head++, win_tail++
+    ) {
       ma[i] = cur_sum / order
-      cur_sum -= (series[window_head] / 2)
-      cur_sum += (series[window_tail] / 2)
-      cur_sum -= (series[window_head + 1] / 2)
-      cur_sum += (series[window_tail + 1] / 2)
+      cur_sum += (
+        (ts[win_tail] / 2) + (ts[win_tail + 1] / 2)
+        - (ts[win_head] / 2) - (ts[win_head + 1] / 2)
+      )
     }
   }
 
   return ma
 }
+
+module.exports = ma
