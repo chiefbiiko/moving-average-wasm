@@ -1,4 +1,6 @@
-/* hyndman's forecast::ma for reference
+/*
+hyndman's forecast::ma for reference:
+
 ma <- function(x, order, centre=TRUE) {
   if (abs(order - round(order)) > 1e-8) {
     stop("order must be an integer")
@@ -29,18 +31,17 @@ const ma = (ts, order, center = true) => {
   if (order < 2) throw TypeError('order is not greater than 1')
 
   const odd = order % 2
-  const win_len = odd ? order : order + 1
   const ts_len = ts.length
-  const side_len = (win_len - 1) / 2
-  const loop_end = ts_len - side_len
   const mov_avg = Array(ts_len).fill(null)
 
   if (!odd && center) { // even and center
     for (
-      let win_sum = sum(ts, 0, win_len) - (ts[0] / 2) - (ts[order] / 2),
-        i = side_len,
+      let win_sum = sum(ts, 0, order + 1) - (ts[0] / 2) - (ts[order] / 2),
         win_head = 0,
-        win_tail = win_len - 1;
+        win_tail = order,
+        side_len = order / 2,
+        i = side_len,
+        loop_end = ts_len - side_len;
       i < loop_end;
       i++, win_head++, win_tail++
     ) {
@@ -53,9 +54,11 @@ const ma = (ts, order, center = true) => {
   } else if (!odd) { // even
     for (
       let win_sum = sum(ts, 0, order),
-        i = side_len - 1,
         win_head = 0,
-        win_tail = order - 1;
+        win_tail = order - 1,
+        side_len = order / 2,
+        i = side_len - 1,
+        loop_end = ts_len - side_len;
       i < loop_end;
       i++, win_head++, win_tail++
     ) {
@@ -64,14 +67,16 @@ const ma = (ts, order, center = true) => {
     }
   } else if (odd) { // odd
     for (
-      let win_sum = sum(ts, 0, win_len),
-        i = side_len,
+      let win_sum = sum(ts, 0, order),
         win_head = 0,
-        win_tail = win_len - 1;
+        win_tail = order - 1,
+        side_len = win_tail / 2, // actually (order - 1) / 2, saved for dryness
+        i = side_len,
+        loop_end = ts_len - side_len;
       i < loop_end;
       i++, win_head++, win_tail++
     ) {
-      mov_avg[i] = win_sum / win_len
+      mov_avg[i] = win_sum / order
       win_sum += (ts[win_tail + 1] - ts[win_head])
     }
   }
