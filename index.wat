@@ -1,28 +1,29 @@
 (module
   (memory (export "memory") 1) ;; 1 page of 64KiB memory
 
-  ;; utility function for incrementing an i32
-  ;; usage: (set_local $x (call $increment (get_local $x)))
-  (func $increment (param $value i32) (result i32)
-    (i32.add
-      (get_local $value)
-      (i32.const 1)
-    )
-  )
-
   (func $f64_ma
     (export "f64_ma")
-    (param $ts_ptr i32)
-    (param $ts_len i32)
+
+    (param $in_ptr i32)
+    (param $in_len i32)
     (param $order i32)
     (param $center i32)
-    ;; result: how2 declare array return type?
+    (param $out_ptr i32)
 
-    ;; locals
-    (local $odd f32)
-    (local $mov_avg_ptr i32) ;; how2 setup the return array?
+    (local $odd i32)
+    (local $win_sum f64)
+    (local $win_head i32)
+    (local $win_tail i32)
+    (local $side_len i32)
+    (local $loop_end i32)
 
-    ;; 3-fold branch on odd and center 2 setup the remaining locals (loop vars)
+    ;; check if order is odd
+    (set_local $odd (i32.and (get_local $order) (i32.const 1)))
+
+    ;; 3-fold branch on odd and center 2 init the remaining locals (loop vars)
+
+
+    ;; make sure $out_ptr points to where it should before looping
 
     ;; loop body...
   )

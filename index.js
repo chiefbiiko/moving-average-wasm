@@ -30,7 +30,7 @@ const ma = (ts, order, center = true) => {
   if (order % 1) throw TypeError('order is not an integer')
   if (order < 2) throw TypeError('order is not greater than 1')
 
-  const odd = order % 2
+  const odd = order % 2 // order & 1
   const ts_len = ts.length
   const mov_avg = Array(ts_len).fill(null)
 
