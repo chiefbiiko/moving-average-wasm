@@ -21,7 +21,21 @@
     (set_local $odd (i32.and (get_local $order) (i32.const 1)))
 
     ;; 3-fold branch on odd and center 2 init the remaining locals (loop vars)
+    (if (i32.eqz (get_local $odd) (i32.const 1))
+      (then ;; if odd
 
+      )
+      (else
+        (if (i32.eqz (get_local $center) (i32.const 0))
+          (then ;; if even && !center
+
+          )
+          (else ;; if even && center
+
+          )
+        )
+      )
+    )
 
     ;; make sure $out_ptr points to where it should before looping
 
