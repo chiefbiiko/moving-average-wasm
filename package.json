@@ -4,7 +4,7 @@
   "description": "calculate moving averages in WebAssembly",
   "main": "index.js",
   "scripts": {
-    "test": "tape test.wat.js"
+    "test": "echo js test && tape ./test.js && echo wasm test && tape ./test.wat.js"
   },
   "repository": {
     "type": "git",
