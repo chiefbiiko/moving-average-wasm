@@ -42,7 +42,7 @@
     (local $side_len i32)
     (local $loop_end i32)
 
-    ;; check if order is odd
+    ;; odd = order & 1 ;; check if order is odd
     (set_local $odd (i32.and (get_local $order) (i32.const 1)))
 
     ;; 3-fold branch on odd and center 2 init the remaining locals (loop vars)
