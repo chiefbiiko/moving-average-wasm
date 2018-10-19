@@ -1,15 +1,16 @@
 (module
-  (memory (export "memory") 1) ;; 1 page of 64KiB memory
+  (memory (export "memory") 1 10000) ;; 1 page of 64KiB memory
 
   ;; utility
   (func $f64_sum
     (export "f64_sum")
     (param $arr_ptr i32)
-    (param $start i32)
     (param $end i32)
     (result f64)
 
     (local $sum f64)
+
+    (set_local $sum (f64.const 0))
 
     (block $end_loop
       (loop $start_loop
@@ -22,7 +23,8 @@
           )
         )
 
-        (set_local $arr_ptr (get_local $arr_ptr) (i32.const 1)) ;; or += 64?
+        (set_local $arr_ptr (get_local $arr_ptr) (i32.const 8)) ;; mv fwd 8bytes
+        (br $start_loop)
       )
     )
 
