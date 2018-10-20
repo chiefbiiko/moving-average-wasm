@@ -56,7 +56,7 @@
         (if (i32.eqz (get_local $center))
           (then ;; if even && !center
 
-            ;;(set_local $win_sum ())
+            (set_local $win_sum (call $f64_sum (i32.const 0) (get_local $order)))
 
           )
           (else ;; if even && center
