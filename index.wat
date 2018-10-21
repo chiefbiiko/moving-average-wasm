@@ -49,12 +49,30 @@
     (if (i32.eq (get_local $odd) (i32.const 1))
       (then ;; if odd
 
-        (set_local $win_sum (call $f64_sum (i32.const 0) (get_local $order)))
-        (set_local $win_head (i32.const 0))
-        (set_local $win_tail (i32.sub (get_local $order) (i32.const 1)))
-        (set_local $side_len (i32.div_u (get_local $win_tail) (i32.const 2)))
-        ;; i
-        ;; loop_end
+        ;; win_sum = sum(memory[in_ptr..order]) ;; calc initial window sum
+        (set_local $win_sum
+          (call $f64_sum
+            (get_local $in_ptr)
+            (get_local $order)))
+        ;; win_head = in_ptr ;; set window head to start of input arr
+        (set_local $win_head (get_local $in_ptr))
+        ;; win_tail = order - 1 + in_ptr ;; set window tail to end of input arr
+        (set_local $win_tail
+          (i32.add
+            (get_local $in_ptr)
+            (i32.sub
+              (get_local $order)
+              (i32.const 1))))
+        ;; side_len = win_tail - in_ptr / 2 ;; calc window side len
+        (set_local $side_len
+          (i32.div_u
+            (i32.sub
+              (get_local $win_tail) ;; actually: order - 1 + in_ptr
+              (get_local $in_ptr))
+            (i32.const 2)))
+        ;; in_ptr += side_len
+        (set_local $in_ptr (i32.add (get_local $in_ptr) (get_local $side_len)))
+        ;; loop_end = in_len - side_len + in_ptr
 
       )
       (else
