@@ -49,19 +49,20 @@
     (if (i32.eq (get_local $odd) (i32.const 1))
       (then ;; if odd
 
-
+        (set_local $win_sum (call $f64_sum (i32.const 0) (get_local $order)))
+        (set_local $win_head (i32.const 0))
+        (set_local $win_tail (i32.sub (get_local $order) (i32.const 1)))
+        (set_local $side_len (i32.div_u (get_local $win_tail) (i32.const 2)))
+        ;; i
+        ;; loop_end
 
       )
       (else
         (if (i32.eqz (get_local $center))
           (then ;; if even && !center
 
-            (set_local $win_sum (call $f64_sum (i32.const 0) (get_local $order)))
-
           )
           (else ;; if even && center
-
-
 
           )
         )
