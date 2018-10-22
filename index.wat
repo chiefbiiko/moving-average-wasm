@@ -109,7 +109,7 @@
           (get_local $out_ptr)
           (f64.div
             (get_local $win_sum)
-            (get_local $order)))
+            (f64.convert_u/i32 (get_local $order))))
 
         ;; in_ptr += 8
         (set_local $in_ptr (i32.add (get_local $in_ptr) (i32.const 8)))
@@ -124,9 +124,9 @@
             (set_local $win_tail (i32.add (get_local $win_tail) (i32.const 8)))
             ;; win_sum += (ts[win_tail] - ts[win_head])
             (set_local $win_sum
-              (i32.add
+              (f64.add
                 (get_local $win_sum)
-                (i32.sub
+                (f64.sub
                   (f64.load (get_local $win_tail))
                   (f64.load (get_local $win_head)))))
             ;; win_head += 8
