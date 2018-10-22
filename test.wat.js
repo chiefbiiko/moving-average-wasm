@@ -11,8 +11,27 @@ tape('f64_sum', t => { // dev test
   t.end()
 })
 
-tape.skip('f64_ma - odd-ordered moving average', t => {
-  const arr = [ 1, 2, 3, 4, 5 ]
-  const exp = new Float64Array([ null, 2, 3, 4, null ])
+tape.only('f64_ma - odd-ordered moving average', t => {
+  const in_arr = [ 1, 2, 3, 4, 5 ]
+  const in_ptr = 0
 
+  new Float64Array(wasm.exports.memory.buffer).set(in_arr, in_ptr, in_arr.length)
+  const out_arr = new Float64Array(wasm.exports.memory.buffer, in_arr.length, in_arr.length)
+  // const exp = new Float64Array([ null, 2, 3, 4, null ])
+
+  t.same(out_arr, new Float64Array([ 0, 0, 0, 0, 0 ]), 'same typed arr')
+
+  const in_arr_byte_length = in_arr.length * 8
+
+  wasm.exports.f64_ma(
+    in_ptr, // in_arr ptr into memory
+    in_arr_byte_length, // in_arr byteLength
+    3,  // order
+    0, // center
+    in_ptr + in_arr_byte_length // out_arr ptr into memory
+  )
+
+  t.same(out_arr, new Float64Array([ null, 2, 3, 4, null ]), 'same typed arr')
+
+  t.end()
 })

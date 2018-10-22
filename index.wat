@@ -56,18 +56,18 @@
             (get_local $order)))
         ;; win_head = in_ptr ;; set window head to start of input arr
         (set_local $win_head (get_local $in_ptr))
-        ;; win_tail = order - 1 + in_ptr ;; set window tail to end of input arr
+        ;; win_tail = order - 8 + in_ptr ;; set window tail to end of input arr
         (set_local $win_tail
           (i32.add
             (get_local $in_ptr)
             (i32.sub
               (get_local $order)
-              (i32.const 1))))
+              (i32.const 8))))
         ;; side_len = win_tail - in_ptr / 2 ;; calc window side len
         (set_local $side_len
           (i32.div_u
             (i32.sub
-              (get_local $win_tail) ;; actually: order - 1 + in_ptr
+              (get_local $win_tail) ;; actually: order - 8 + in_ptr
               (get_local $in_ptr))
             (i32.const 2)))
         ;; in_ptr += side_len
