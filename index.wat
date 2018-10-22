@@ -73,6 +73,12 @@
         ;; in_ptr += side_len
         (set_local $in_ptr (i32.add (get_local $in_ptr) (get_local $side_len)))
         ;; loop_end = in_len - side_len + in_ptr
+        (set_local $loop_end
+          (i32.add
+            (i32.sub
+              (get_local $in_len)
+              (get_local $side_len))
+            (get_local $in_ptr)))
 
       )
       (else
@@ -88,7 +94,61 @@
     )
 
     ;; make sure $out_ptr points to where it should before looping
+    (set_local $out_ptr
+      (i32.add
+        (get_local $in_ptr)
+        (get_local $in_len)))
 
     ;; loop body...
+    (block $end_loop
+      (loop $start_loop
+        (br_if $end_loop (i32.eq (get_local $in_ptr) (get_local $loop_end)))
+
+        ;; TODO: mov_avg[i] = win_sum / order
+        (f64.store
+          (get_local $out_ptr)
+          (f64.div
+            (get_local $win_sum)
+            (get_local $order)))
+
+        ;; in_ptr += 8
+        (set_local $in_ptr (i32.add (get_local $in_ptr) (i32.const 8)))
+        ;; out_ptr += 8
+        (set_local $out_ptr (i32.add (get_local $out_ptr) (i32.const 8)))
+
+        ;; ;; 3-fold branch on odd and center 2 calc win_sum
+        (if (i32.eq (get_local $odd) (i32.const 1))
+          (then ;; if odd
+
+            ;; win_tail += 8
+            (set_local $win_tail (i32.add (get_local $win_tail) (i32.const 8)))
+            ;; win_sum += (ts[win_tail] - ts[win_head])
+            (set_local $win_sum
+              (i32.add
+                (get_local $win_sum)
+                (i32.sub
+                  (f64.load (get_local $win_tail))
+                  (f64.load (get_local $win_head)))))
+            ;; win_head += 8
+            (set_local $win_head (i32.add (get_local $win_head) (i32.const 8)))
+
+          )
+          (else
+            (if (i32.eqz (get_local $center))
+              (then ;; if even && !center
+
+              )
+              (else ;; if even && center
+
+              )
+            )
+          )
+        )
+        ;; ;;
+
+        (br $start_loop)
+      )
+    )
+
   )
 )
