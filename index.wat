@@ -139,6 +139,7 @@
               (f64.add
                 (get_local $win_sum)
                 (f64.sub
+                  ;; BUG: RuntimeError: memory access out of bounds; here?
                   (f64.load (get_local $win_tail))
                   (f64.load (get_local $win_head)))))
             ;; win_head += 8
