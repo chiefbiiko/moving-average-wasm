@@ -44,12 +44,12 @@
     (local $win_tail i32)
     (local $side_len i32)
     (local $loop_end i32)
-    (local $float_order f64)
+    (local $f64_order f64)
 
     ;; odd = order & 1 ;; check if order is odd
     (set_local $odd (i32.and (get_local $order) (i32.const 1)))
 
-    (set_local $float_order (f64.convert_u/i32 (get_local $order)))
+    (set_local $f64_order (f64.convert_u/i32 (get_local $order)))
 
     ;; 3-fold branch on odd and center 2 init the remaining locals (loop vars)
     (if (i32.eq (get_local $odd) (i32.const 1))
@@ -121,7 +121,7 @@
           (get_local $out_ptr)
           (f64.div
             (get_local $win_sum)
-            (get_local $float_order)))
+            (get_local $f64_order)))
 
         ;; in_ptr += 8
         ;;(set_local $in_ptr (i32.add (get_local $in_ptr) (i32.const 8)))
