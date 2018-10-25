@@ -125,10 +125,10 @@
         (br_if $end_loop
           (i32.eq (get_local $out_ptr) (get_local $loop_end_byte)))
 
-        ;; BUG: RuntimeError: memory access out of bounds
         ;; mov_avg[i] = win_sum / f64_order
         (f64.store
           (get_local $out_ptr)
+          (i32.const 8)
           (f64.div (get_local $win_sum) (get_local $f64_order)))
 
         ;; in_ptr += 8 ;; WRONG!
@@ -149,9 +149,8 @@
               (f64.add
                 (get_local $win_sum)
                 (f64.sub
-                  ;; BUG: RuntimeError: memory access out of bounds
-                  (f64.load (get_local $win_tail_byte))
-                  (f64.load (get_local $win_head_byte)))))
+                  (f64.load (get_local $win_tail_byte) (i32.const 8))
+                  (f64.load (get_local $win_head_byte) (i32.const 8)))))
             ;; win_head_byte += 8
             (set_local $win_head_byte
               (i32.add (get_local $win_head_byte) (i32.const 8)))
