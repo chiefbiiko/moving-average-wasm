@@ -1,4 +1,9 @@
 (module
+  ;; (memory (export "memory") 1) ;; 1 page of 64KiB memory
+
+  ;; (func $i32_debug (import "imports" "i32_debug") (param i32))
+  ;; (func $f64_debug (import "imports" "f64_debug") (param f64))
+
   (memory (export "memory") 1) ;; 1 page of 64KiB memory
 
   (func $f64_sum
@@ -60,6 +65,8 @@
           (call $f64_sum
             (get_local $in_ptr)
             (get_local $order)))
+
+        ;; (call $f64_debug (get_local $win_sum)) ;; DEBUG
 
         ;; win_head = in_ptr ;; set window head to start of input arr
         (set_local $win_head (get_local $in_ptr))

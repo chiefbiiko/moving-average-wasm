@@ -1,5 +1,10 @@
 const tape = require('tape')
-const wasm = require('./index.wat.js')()
+const wasm = require('./index.wat.js')({
+  imports: {
+     i32_debug: x => console.log(`i32: ${x}`),
+     f64_debug: x => console.log(`f64: ${x}`)
+  }
+})
 
 tape('f64_sum', t => { // dev test
   const arr = [ 1, 2, 3, 4, 5 ]
