@@ -141,7 +141,7 @@
         (if (i32.eq (get_local $odd) (i32.const 1))
           (then ;; if odd
 
-            ;; win_tail_vyte += 8
+            ;; win_tail_byte += 8
             (set_local $win_tail_byte
               (i32.add (get_local $win_tail_byte) (i32.const 8)))
             ;; win_sum += (ts[win_tail_byte] - ts[win_head_byte])
@@ -149,6 +149,7 @@
               (f64.add
                 (get_local $win_sum)
                 (f64.sub
+                  ;; BUG: RuntimeError: memory access out of bounds
                   (f64.load (get_local $win_tail_byte))
                   (f64.load (get_local $win_head_byte)))))
             ;; win_head_byte += 8
