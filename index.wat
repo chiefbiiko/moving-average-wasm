@@ -1,5 +1,4 @@
 (module
-  ;; (memory (export "memory") 1) ;; 1 page of 64KiB memory
 
   ;; (func $i32_debug (import "imports" "i32_debug") (param i32))
   ;; (func $f64_debug (import "imports" "f64_debug") (param f64))
@@ -50,6 +49,12 @@
     (local $side_len i32)
     (local $loop_end i32)
     (local $f64_order f64)
+    (local $win_len i32)
+
+    (set_local $win_len
+      (i32.mul ;; aka win_len
+        (get_local $order)
+        (i32.const 8)))
 
     ;; odd = order & 1 ;; check if order is odd
     (set_local $odd (i32.and (get_local $order) (i32.const 1)))
@@ -64,19 +69,17 @@
         (set_local $win_sum
           (call $f64_sum
             (get_local $in_ptr)
-            (get_local $order)))
-
-        ;; (call $f64_debug (get_local $win_sum)) ;; DEBUG
+            (get_local $win_len)))
 
         ;; win_head = in_ptr ;; set window head to start of input arr
         (set_local $win_head (get_local $in_ptr))
 
-        ;; win_tail = order - 8 + in_ptr ;; set window tail to end of input arr
+        ;; win_tail = win_len - 8 + in_ptr ;; set window tail to end of input arr
         (set_local $win_tail
           (i32.add
             (get_local $in_ptr)
             (i32.sub
-              (get_local $order)
+              (get_local $win_len)
               (i32.const 8))))
 
         ;; side_len = (win_tail - in_ptr) / 2 ;; calc window side len
@@ -146,7 +149,6 @@
               (f64.add
                 (get_local $win_sum)
                 (f64.sub
-                  ;; BUG: RuntimeError: memory access out of bounds; here?
                   (f64.load (get_local $win_tail))
                   (f64.load (get_local $win_head)))))
             ;; win_head += 8
