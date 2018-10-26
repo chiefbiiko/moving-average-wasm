@@ -148,10 +148,12 @@
             (set_local $win_sum
               (f64.add
                 (get_local $win_sum)
+                ;; BUG: error: type mismatch in f64.sub, expected [f64, f64] but got [... i32, f64]
                 (f64.sub
                   (f64.load (get_local $win_tail_byte) (i32.const 8))
                   (f64.load (get_local $win_head_byte) (i32.const 8)))))
             ;; win_head_byte += 8
+            ;; BUG: error: type mismatch in if true branch, expected [] but got [f64, i32]
             (set_local $win_head_byte
               (i32.add (get_local $win_head_byte) (i32.const 8)))
 
