@@ -5,6 +5,8 @@
 
   (memory (export "memory") 1) ;; 1 page of 64KiB memory
 
+  (global $F64_BYTE_LEN i32 (i32.const 8))
+
   (func $f64_sum
     (export "f64_sum") ;; just an utility; exclude from final exports
     (param $ptr i32) ;; start byte index in memory
@@ -24,7 +26,8 @@
 
         ;; ptr += 8
         (set_local $ptr
-          (i32.add (get_local $ptr) (i32.const 8)))
+          ;; (i32.add (get_local $ptr) (i32.const 8)))
+          (i32.add (get_local $ptr) (get_global $F64_BYTE_LEN)))
 
         (br $start_loop)
       )
