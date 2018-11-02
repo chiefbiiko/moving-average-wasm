@@ -70,7 +70,7 @@
 
 
         (set_local $win_byte_len
-          (i32.mul (get_local $order) (i32.const 8)))
+          (i32.mul (get_local $order) (get_global $F64_BYTE_LEN)))
 
         ;; win_sum = sum(memory[in_ptr..order]) ;; calc initial window sum
         (set_local $win_sum
@@ -83,7 +83,7 @@
         (set_local $win_tail_byte
           (i32.add
             (get_local $in_ptr)
-            (i32.sub (get_local $win_byte_len) (i32.const 8))))
+            (i32.sub (get_local $win_byte_len) (get_global $F64_BYTE_LEN))))
 
         ;; side_byte_len = (win_tail_byte - in_ptr) / 2 ;; calc window side len
         (set_local $side_byte_len
@@ -138,7 +138,7 @@
         ;;(set_local $in_ptr (i32.add (get_local $in_ptr) (i32.const 8)))
         ;; out_ptr += 8
         (set_local $out_ptr
-          (i32.add (get_local $out_ptr) (i32.const 8)))
+          (i32.add (get_local $out_ptr) (get_global $F64_BYTE_LEN)))
 
         ;; ;; 3-fold branch on odd and center 2 calc win_sum
         (if (i32.eq (get_local $odd) (i32.const 1))
@@ -146,7 +146,7 @@
 
             ;; win_tail_byte += 8
             (set_local $win_tail_byte
-              (i32.add (get_local $win_tail_byte) (i32.const 8)))
+              (i32.add (get_local $win_tail_byte) (get_global $F64_BYTE_LEN)))
             ;; win_sum += (ts[win_tail_byte] - ts[win_head_byte])
             (set_local $win_sum
               (f64.add
@@ -158,7 +158,7 @@
                 )))
             ;; win_head_byte += 8
             (set_local $win_head_byte
-              (i32.add (get_local $win_head_byte) (i32.const 8)))
+              (i32.add (get_local $win_head_byte) (get_global $F64_BYTE_LEN)))
 
           )
           (else
