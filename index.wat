@@ -82,8 +82,8 @@
         ;; win_tail_byte = win_byte_len - 8 + in_ptr ;; set window tail to end of input arr
         (set_local $win_tail_byte
           (i32.add
-            (get_local $in_ptr)
-            (i32.sub (get_local $win_byte_len) (get_global $F64_BYTE_LEN))))
+            (i32.sub (get_local $win_byte_len) (get_global $F64_BYTE_LEN))
+            (get_local $in_ptr)))
 
         ;; side_byte_len = (win_tail_byte - in_ptr) / 2 ;; calc window side len
         (set_local $side_byte_len
