@@ -16,21 +16,23 @@ ma <- function(x, order, centre=TRUE) {
 }
 */
 
-const isNumArr = x => Array.isArray(x) && x.every(y => typeof y === 'number')
+function isNumArr (x) {
+   return Array.isArray(x) && x.every(y => typeof y === 'number')
+}
 
-const sum = (arr, start, end) => {
-  for (var sum = 0, i = start; i < end; i++) sum += arr[i]
+function sum (arr, start, end) {
+  for (var sum = 0, i = end - 1; i >= start; i--) sum += arr[i] // moonwalkin
   return sum
 }
 
 // if order is even, the observations averaged will include one more
 // observation from the future than the past
-const ma = (ts, order, center = true) => {
+function ma (ts, order, center = true) {
   if (!isNumArr(ts)) throw TypeError('ts (time series) is not a number array')
   if (order % 1) throw TypeError('order is not an integer')
   if (order < 2) throw TypeError('order is not greater than 1')
 
-  const odd = order % 2 // order & 1
+  const odd = order & 1
   const ts_len = ts.length
   const mov_avg = Array(ts_len).fill(null)
 
