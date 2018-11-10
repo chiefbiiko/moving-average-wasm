@@ -4,9 +4,11 @@
   "description": "calculate moving averages in WebAssembly",
   "main": "index.js",
   "scripts": {
-    "build-js": "wat2js ./index.wat > ./index.wat.js",
-    "build-wasm": "wat2wasm --dump-module --debug-names -o ./index.wasm ./index.wat",
-    "test": "echo js test && tape ./test.js && echo wasm test && tape ./test.wat.js"
+    "build": "npx wat2js ./index.wat > ./index.wat.js",
+    "build-debug": "npx wat2wasm --dump-module --debug-names -o ./index.wasm ./index.wat",
+    "test": "npm run test-ref && npm run test-wasm",
+    "test-ref": "tape ./test.js",
+    "test-wasm": "tape ./test.wat.js"
   },
   "repository": {
     "type": "git",
@@ -22,9 +24,8 @@
     "url": "https://github.com/chiefbiiko/moving-average-wasm/issues"
   },
   "homepage": "https://github.com/chiefbiiko/moving-average-wasm#readme",
+  "dependencies": {},
   "devDependencies": {
-    "tape": "^4.9.1",
-    "wat2js": "^2.1.1",
-    "wat2wasm": "^1.0.2"
+    "tape": "^4.9.1"
   }
 }
