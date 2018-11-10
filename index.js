@@ -16,8 +16,12 @@ ma <- function(x, order, centre=TRUE) {
 }
 */
 
+function isNum (x) {
+  return typeof x === 'number'
+}
+
 function isNumArr (x) {
-   return Array.isArray(x) && x.every(y => typeof y === 'number')
+   return Array.isArray(x) && x.every(isNum)
 }
 
 function sum (arr, start, end) {
